@@ -61,6 +61,19 @@ nav:
           - options.py: nextmv-gurobipy/reference/options.md
           - solution.py: nextmv-gurobipy/reference/solution.md
           - statistics.py: nextmv-gurobipy/reference/statistics.md
+  - nextmv-ortools:
+      - Overview & installation: nextmv-ortools/index.md
+      - Tutorials:
+          - Options: nextmv-ortools/tutorials/options.md
+          - Model: nextmv-ortools/tutorials/model.md
+          - Statistics: nextmv-ortools/tutorials/statistics.md
+          - Solution: nextmv-ortools/tutorials/solution.md
+      - Reference:
+          - linear_solver.py: nextmv-ortools/reference/linear_solver.md
+          - cp_sat.py: nextmv-ortools/reference/cp_sat.md
+          - knapsack.py: nextmv-ortools/reference/knapsack.md
+          - routing.py: nextmv-ortools/reference/routing.md
+          - graph.py: nextmv-ortools/reference/graph.md
   - nextmv-scikit-learn:
       - Overview & installation: nextmv-scikit-learn/index.md
       - Tutorials:

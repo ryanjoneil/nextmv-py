@@ -26,6 +26,9 @@
 <a href="https://pypi.org/project/nextmv-gurobipy" target="_blank">
     <img src="https://img.shields.io/pypi/v/nextmv-gurobipy?color=%2334D058&label=nextmv-gurobipy" alt="Package version">
 </a>
+<a href="https://pypi.org/project/nextmv-ortools" target="_blank">
+    <img src="https://img.shields.io/pypi/v/nextmv-ortools?color=%2334D058&label=nextmv-ortools" alt="Package version">
+</a>
 <a href="https://pypi.org/project/nextmv-scikit-learn" target="_blank">
     <img src="https://img.shields.io/pypi/v/nextmv-scikit-learn?color=%2334D058&label=nextmv-scikit-learn" alt="Package version">
 </a>
@@ -41,6 +44,9 @@ can find the source for the following packages:
 * [`nextmv-gurobipy`](./nextmv-gurobipy/README.md): A Python SDK providing
   convenience functions for working with Gurobi (`gurobipy`) models in the
   Nextmv platform.
+* [`nextmv-ortools`](./nextmv-ortools/README.md): A Python SDK providing
+  convenience functions for working with OR-Tools models in the Nextmv
+  platform.
 * [`nextmv-scikit-learn`](./nextmv-scikit-learn/README.md): A Python SDK
   providing convenience functions for working with scikit-learn models in the
   Nextmv platform.
