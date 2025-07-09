@@ -20,8 +20,7 @@ RoutingModelOptions
 import time
 from typing import Any, Optional
 
-from ortools.constraint_solver import pywrapcp
-from ortools.constraint_solver import routing_enums_pb2
+from ortools.constraint_solver import pywrapcp, routing_enums_pb2
 
 import nextmv
 
@@ -62,38 +61,54 @@ class RoutingModelOptions:
                 name="time_limit",
                 option_type=int,
                 default=60,
-                description="Time limit for the solver in seconds"
+                description="Time limit for the solver in seconds",
             ),
             nextmv.Option(
                 name="solution_limit",
                 option_type=int,
                 default=1,
-                description="Maximum number of solutions to find"
+                description="Maximum number of solutions to find",
             ),
             nextmv.Option(
                 name="first_solution_strategy",
                 option_type=str,
                 default="PATH_CHEAPEST_ARC",
                 description="Strategy for finding initial solution",
-                choices=["PATH_CHEAPEST_ARC", "PATH_MOST_CONSTRAINED_ARC", "EVALUATOR_STRATEGY", 
-                        "SAVINGS", "SWEEP", "CHRISTOFIDES", "ALL_UNPERFORMED", "BEST_INSERTION", 
-                        "PARALLEL_CHEAPEST_INSERTION", "SEQUENTIAL_CHEAPEST_INSERTION", 
-                        "LOCAL_CHEAPEST_INSERTION", "GLOBAL_CHEAPEST_ARC", "LOCAL_CHEAPEST_ARC", 
-                        "FIRST_UNBOUND_MIN_VALUE"]
+                choices=[
+                    "PATH_CHEAPEST_ARC",
+                    "PATH_MOST_CONSTRAINED_ARC",
+                    "EVALUATOR_STRATEGY",
+                    "SAVINGS",
+                    "SWEEP",
+                    "CHRISTOFIDES",
+                    "ALL_UNPERFORMED",
+                    "BEST_INSERTION",
+                    "PARALLEL_CHEAPEST_INSERTION",
+                    "SEQUENTIAL_CHEAPEST_INSERTION",
+                    "LOCAL_CHEAPEST_INSERTION",
+                    "GLOBAL_CHEAPEST_ARC",
+                    "LOCAL_CHEAPEST_ARC",
+                    "FIRST_UNBOUND_MIN_VALUE",
+                ],
             ),
             nextmv.Option(
                 name="local_search_metaheuristic",
                 option_type=str,
                 default="GUIDED_LOCAL_SEARCH",
                 description="Metaheuristic for local search",
-                choices=["GUIDED_LOCAL_SEARCH", "TABU_SEARCH", "GENERIC_TABU_SEARCH", 
-                        "SIMULATED_ANNEALING", "GREEDY_DESCENT"]
+                choices=[
+                    "GUIDED_LOCAL_SEARCH",
+                    "TABU_SEARCH",
+                    "GENERIC_TABU_SEARCH",
+                    "SIMULATED_ANNEALING",
+                    "GREEDY_DESCENT",
+                ],
             ),
             nextmv.Option(
                 name="log_search",
                 option_type=bool,
                 default=False,
-                description="Enable search progress logging"
+                description="Enable search progress logging",
             ),
         ]
 
@@ -161,8 +176,9 @@ def RoutingModel(manager: pywrapcp.RoutingIndexManager, options: nextmv.Options)
     return routing
 
 
-def RoutingModelSolution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, 
-                        solution: pywrapcp.Assignment) -> Optional[dict[str, Any]]:
+def RoutingModelSolution(
+    manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment
+) -> Optional[dict[str, Any]]:
     """
     Creates a basic solution dictionary from an OR-Tools routing model.
 
@@ -212,7 +228,7 @@ def RoutingModelSolution(manager: pywrapcp.RoutingIndexManager, routing: pywrapc
         route = []
         index = routing.Start(vehicle_id)
         route_distance = 0
-        
+
         while not routing.IsEnd(index):
             node_index = manager.IndexToNode(index)
             route.append(node_index)
@@ -220,7 +236,7 @@ def RoutingModelSolution(manager: pywrapcp.RoutingIndexManager, routing: pywrapc
             index = solution.Value(routing.NextVar(index))
             if not routing.IsEnd(index):
                 route_distance += routing.GetArcCostForVehicle(previous_index, index, vehicle_id)
-        
+
         # Add the end depot
         route.append(manager.IndexToNode(index))
         routes.append(route)
@@ -234,8 +250,11 @@ def RoutingModelSolution(manager: pywrapcp.RoutingIndexManager, routing: pywrapc
     }
 
 
-def RoutingModelStatistics(routing: pywrapcp.RoutingModel, solution: Optional[pywrapcp.Assignment] = None, 
-                          run_duration_start: Optional[float] = None) -> nextmv.Statistics:
+def RoutingModelStatistics(
+    routing: pywrapcp.RoutingModel,
+    solution: Optional[pywrapcp.Assignment] = None,
+    run_duration_start: Optional[float] = None,
+) -> nextmv.Statistics:
     """
     Creates a Nextmv statistics object from an OR-Tools routing model, once it has been solved.
 

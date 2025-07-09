@@ -20,9 +20,7 @@ SimpleLinearSumAssignmentOptions, SimpleMaxFlowOptions, SimpleMinCostFlowOptions
 import time
 from typing import Any, Optional
 
-from ortools.graph.python import linear_sum_assignment
-from ortools.graph.python import max_flow
-from ortools.graph.python import min_cost_flow
+from ortools.graph.python import linear_sum_assignment, max_flow, min_cost_flow
 
 import nextmv
 
@@ -38,7 +36,7 @@ class SimpleLinearSumAssignmentOptions:
                 name="solver_name",
                 option_type=str,
                 default="LinearSumAssignment",
-                description="Name identifier for the linear sum assignment solver"
+                description="Name identifier for the linear sum assignment solver",
             ),
         ]
 
@@ -50,41 +48,42 @@ class SimpleLinearSumAssignmentOptions:
 def SimpleLinearSumAssignment(options: nextmv.Options) -> linear_sum_assignment.SimpleLinearSumAssignment:
     """Creates an OR-Tools linear sum assignment solver."""
     nextmv.redirect_stdout()
-    
+
     assignment = linear_sum_assignment.SimpleLinearSumAssignment()
     options.provider = "ortools_linear_sum_assignment"
-    
+
     return assignment
 
 
-def SimpleLinearSumAssignmentSolution(assignment: linear_sum_assignment.SimpleLinearSumAssignment) -> Optional[dict[str, Any]]:
+def SimpleLinearSumAssignmentSolution(
+    assignment: linear_sum_assignment.SimpleLinearSumAssignment,
+) -> Optional[dict[str, Any]]:
     """Creates a solution dictionary from an OR-Tools linear sum assignment solver."""
     try:
         status = assignment.Solve()
         if status != assignment.OPTIMAL:
             return None
-            
-        solution = {
-            "optimal_cost": assignment.OptimalCost(),
-            "assignments": [],
-            "status": "OPTIMAL"
-        }
-        
+
+        solution = {"optimal_cost": assignment.OptimalCost(), "assignments": [], "status": "OPTIMAL"}
+
         for i in range(assignment.NumNodes()):
             if assignment.RightMate(i) >= 0:
-                solution["assignments"].append({
-                    "left_node": i,
-                    "right_node": assignment.RightMate(i),
-                    "cost": assignment.AssignmentCost(i, assignment.RightMate(i))
-                })
-        
+                solution["assignments"].append(
+                    {
+                        "left_node": i,
+                        "right_node": assignment.RightMate(i),
+                        "cost": assignment.AssignmentCost(i, assignment.RightMate(i)),
+                    }
+                )
+
         return solution
     except Exception:
         return None
 
 
-def SimpleLinearSumAssignmentStatistics(assignment: linear_sum_assignment.SimpleLinearSumAssignment, 
-                                      run_duration_start: Optional[float] = None) -> nextmv.Statistics:
+def SimpleLinearSumAssignmentStatistics(
+    assignment: linear_sum_assignment.SimpleLinearSumAssignment, run_duration_start: Optional[float] = None
+) -> nextmv.Statistics:
     """Creates statistics from an OR-Tools linear sum assignment solver."""
     run = nextmv.RunStatistics()
     if run_duration_start is not None:
@@ -107,7 +106,7 @@ def SimpleLinearSumAssignmentStatistics(assignment: linear_sum_assignment.Simple
             value=optimal_cost,
             custom={
                 "status": status,
-                "num_nodes": assignment.NumNodes() if hasattr(assignment, 'NumNodes') else None,
+                "num_nodes": assignment.NumNodes() if hasattr(assignment, "NumNodes") else None,
             },
         ),
         series_data=nextmv.SeriesData(),
@@ -125,7 +124,7 @@ class SimpleMaxFlowOptions:
                 name="solver_name",
                 option_type=str,
                 default="MaxFlow",
-                description="Name identifier for the max flow solver"
+                description="Name identifier for the max flow solver",
             ),
         ]
 
@@ -137,10 +136,10 @@ class SimpleMaxFlowOptions:
 def SimpleMaxFlow(options: nextmv.Options) -> max_flow.SimpleMaxFlow:
     """Creates an OR-Tools max flow solver."""
     nextmv.redirect_stdout()
-    
+
     max_flow_solver = max_flow.SimpleMaxFlow()
     options.provider = "ortools_max_flow"
-    
+
     return max_flow_solver
 
 
@@ -150,30 +149,33 @@ def SimpleMaxFlowSolution(max_flow_solver: max_flow.SimpleMaxFlow) -> Optional[d
         status = max_flow_solver.Solve(0, max_flow_solver.NumNodes() - 1)  # Assumes source=0, sink=last node
         if status != max_flow_solver.OPTIMAL:
             return None
-            
+
         solution = {
             "optimal_flow": max_flow_solver.OptimalFlow(),
             "flows": [],
-            "status": "OPTIMAL"
+            "status": "OPTIMAL",
         }
-        
+
         for i in range(max_flow_solver.NumArcs()):
             if max_flow_solver.Flow(i) > 0:
-                solution["flows"].append({
-                    "arc_index": i,
-                    "tail": max_flow_solver.Tail(i),
-                    "head": max_flow_solver.Head(i),
-                    "flow": max_flow_solver.Flow(i),
-                    "capacity": max_flow_solver.Capacity(i)
-                })
-        
+                solution["flows"].append(
+                    {
+                        "arc_index": i,
+                        "tail": max_flow_solver.Tail(i),
+                        "head": max_flow_solver.Head(i),
+                        "flow": max_flow_solver.Flow(i),
+                        "capacity": max_flow_solver.Capacity(i),
+                    }
+                )
+
         return solution
     except Exception:
         return None
 
 
-def SimpleMaxFlowStatistics(max_flow_solver: max_flow.SimpleMaxFlow, 
-                           run_duration_start: Optional[float] = None) -> nextmv.Statistics:
+def SimpleMaxFlowStatistics(
+    max_flow_solver: max_flow.SimpleMaxFlow, run_duration_start: Optional[float] = None
+) -> nextmv.Statistics:
     """Creates statistics from an OR-Tools max flow solver."""
     run = nextmv.RunStatistics()
     if run_duration_start is not None:
@@ -195,8 +197,8 @@ def SimpleMaxFlowStatistics(max_flow_solver: max_flow.SimpleMaxFlow,
             value=optimal_flow,
             custom={
                 "status": status,
-                "num_nodes": max_flow_solver.NumNodes() if hasattr(max_flow_solver, 'NumNodes') else None,
-                "num_arcs": max_flow_solver.NumArcs() if hasattr(max_flow_solver, 'NumArcs') else None,
+                "num_nodes": max_flow_solver.NumNodes() if hasattr(max_flow_solver, "NumNodes") else None,
+                "num_arcs": max_flow_solver.NumArcs() if hasattr(max_flow_solver, "NumArcs") else None,
             },
         ),
         series_data=nextmv.SeriesData(),
@@ -214,7 +216,7 @@ class SimpleMinCostFlowOptions:
                 name="solver_name",
                 option_type=str,
                 default="MinCostFlow",
-                description="Name identifier for the min cost flow solver"
+                description="Name identifier for the min cost flow solver",
             ),
         ]
 
@@ -226,10 +228,10 @@ class SimpleMinCostFlowOptions:
 def SimpleMinCostFlow(options: nextmv.Options) -> min_cost_flow.SimpleMinCostFlow:
     """Creates an OR-Tools min cost flow solver."""
     nextmv.redirect_stdout()
-    
+
     min_cost_flow_solver = min_cost_flow.SimpleMinCostFlow()
     options.provider = "ortools_min_cost_flow"
-    
+
     return min_cost_flow_solver
 
 
@@ -239,32 +241,35 @@ def SimpleMinCostFlowSolution(min_cost_flow_solver: min_cost_flow.SimpleMinCostF
         status = min_cost_flow_solver.Solve()
         if status != min_cost_flow_solver.OPTIMAL:
             return None
-            
+
         solution = {
             "optimal_cost": min_cost_flow_solver.OptimalCost(),
             "maximum_flow": min_cost_flow_solver.MaximumFlow(),
             "flows": [],
-            "status": "OPTIMAL"
+            "status": "OPTIMAL",
         }
-        
+
         for i in range(min_cost_flow_solver.NumArcs()):
             if min_cost_flow_solver.Flow(i) > 0:
-                solution["flows"].append({
-                    "arc_index": i,
-                    "tail": min_cost_flow_solver.Tail(i),
-                    "head": min_cost_flow_solver.Head(i),
-                    "flow": min_cost_flow_solver.Flow(i),
-                    "capacity": min_cost_flow_solver.Capacity(i),
-                    "unit_cost": min_cost_flow_solver.UnitCost(i)
-                })
-        
+                solution["flows"].append(
+                    {
+                        "arc_index": i,
+                        "tail": min_cost_flow_solver.Tail(i),
+                        "head": min_cost_flow_solver.Head(i),
+                        "flow": min_cost_flow_solver.Flow(i),
+                        "capacity": min_cost_flow_solver.Capacity(i),
+                        "unit_cost": min_cost_flow_solver.UnitCost(i),
+                    }
+                )
+
         return solution
     except Exception:
         return None
 
 
-def SimpleMinCostFlowStatistics(min_cost_flow_solver: min_cost_flow.SimpleMinCostFlow, 
-                               run_duration_start: Optional[float] = None) -> nextmv.Statistics:
+def SimpleMinCostFlowStatistics(
+    min_cost_flow_solver: min_cost_flow.SimpleMinCostFlow, run_duration_start: Optional[float] = None
+) -> nextmv.Statistics:
     """Creates statistics from an OR-Tools min cost flow solver."""
     run = nextmv.RunStatistics()
     if run_duration_start is not None:
@@ -287,8 +292,8 @@ def SimpleMinCostFlowStatistics(min_cost_flow_solver: min_cost_flow.SimpleMinCos
             value=optimal_cost,
             custom={
                 "status": status,
-                "num_nodes": min_cost_flow_solver.NumNodes() if hasattr(min_cost_flow_solver, 'NumNodes') else None,
-                "num_arcs": min_cost_flow_solver.NumArcs() if hasattr(min_cost_flow_solver, 'NumArcs') else None,
+                "num_nodes": min_cost_flow_solver.NumNodes() if hasattr(min_cost_flow_solver, "NumNodes") else None,
+                "num_arcs": min_cost_flow_solver.NumArcs() if hasattr(min_cost_flow_solver, "NumArcs") else None,
             },
         ),
         series_data=nextmv.SeriesData(),

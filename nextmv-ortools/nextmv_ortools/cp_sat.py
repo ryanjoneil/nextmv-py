@@ -61,31 +61,31 @@ class CpModelOptions:
                 name="max_time_in_seconds",
                 option_type=float,
                 default=60.0,
-                description="Maximum time limit for the solver in seconds"
+                description="Maximum time limit for the solver in seconds",
             ),
             nextmv.Option(
                 name="num_search_workers",
                 option_type=int,
                 default=1,
-                description="Number of parallel search workers"
+                description="Number of parallel search workers",
             ),
             nextmv.Option(
                 name="log_search_progress",
                 option_type=bool,
                 default=False,
-                description="Enable search progress logging"
+                description="Enable search progress logging",
             ),
             nextmv.Option(
                 name="cp_model_presolve",
                 option_type=bool,
                 default=True,
-                description="Enable model presolving"
+                description="Enable model presolving",
             ),
             nextmv.Option(
                 name="enumerate_all_solutions",
                 option_type=bool,
                 default=False,
-                description="Find all feasible solutions"
+                description="Find all feasible solutions",
             ),
         ]
 
@@ -221,21 +221,25 @@ def CpModelSolution(model: cp_model.CpModel, solver: cp_model.CpSolver) -> Optio
 
     # Extract variable values
     solution = {}
-    
+
     # Get all variables from the model
     variables = []
-    
+
     # We need to extract variables from the model, but CP-SAT doesn't provide
     # a direct way to enumerate all variables. We'll need to track them during model creation
     # For now, we'll extract what we can from the solver response
-    
+
     # This is a limitation of the current CP-SAT API - we can't easily enumerate all variables
     # Users should track their variables and pass them to this function or implement custom extraction
-    
+
     return solution
 
 
-def CpModelStatistics(model: cp_model.CpModel, solver: cp_model.CpSolver, run_duration_start: Optional[float] = None) -> nextmv.Statistics:
+def CpModelStatistics(
+    model: cp_model.CpModel,
+    solver: cp_model.CpSolver,
+    run_duration_start: Optional[float] = None,
+) -> nextmv.Statistics:
     """
     Creates a Nextmv statistics object from an OR-Tools CP-SAT solver, once it has been solved.
 
@@ -284,18 +288,17 @@ def CpModelStatistics(model: cp_model.CpModel, solver: cp_model.CpSolver, run_du
 
     # Get status from solver
     status = solver.StatusName()
-    
+
     # Get objective value if available
     objective_value = None
     if status in ["OPTIMAL", "FEASIBLE"]:
         try:
             objective_value = solver.ObjectiveValue()
-        except:
-            # No objective was set
+        except Exception:
             pass
 
     # Get solve duration from solver
-    solve_duration = solver.WallTime() if hasattr(solver, 'WallTime') else None
+    solve_duration = solver.WallTime() if hasattr(solver, "WallTime") else None
 
     return nextmv.Statistics(
         run=run,

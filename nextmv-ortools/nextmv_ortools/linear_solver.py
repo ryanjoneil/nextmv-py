@@ -62,25 +62,25 @@ class LinearSolverOptions:
                 option_type=str,
                 default="GLOP_LINEAR_PROGRAMMING",
                 description="The linear programming solver to use",
-                choices=["GLOP_LINEAR_PROGRAMMING", "CLP_LINEAR_PROGRAMMING", "GLPK_LINEAR_PROGRAMMING"]
+                choices=["GLOP_LINEAR_PROGRAMMING", "CLP_LINEAR_PROGRAMMING", "GLPK_LINEAR_PROGRAMMING"],
             ),
             nextmv.Option(
                 name="time_limit",
                 option_type=float,
                 default=60.0,
-                description="Time limit for the solver in seconds"
+                description="Time limit for the solver in seconds",
             ),
             nextmv.Option(
                 name="num_threads",
                 option_type=int,
                 default=1,
-                description="Number of threads to use"
+                description="Number of threads to use",
             ),
             nextmv.Option(
                 name="enable_output",
                 option_type=bool,
                 default=False,
-                description="Enable solver output"
+                description="Enable solver output",
             ),
         ]
 
@@ -140,7 +140,7 @@ def LinearSolver(options: nextmv.Options) -> pywraplp.Solver:
 
     # Get solver type from options
     solver_type = getattr(options, "solver_type", "GLOP_LINEAR_PROGRAMMING")
-    
+
     # Create the solver
     solver = pywraplp.Solver.CreateSolver(solver_type)
     if not solver:
@@ -280,7 +280,9 @@ def LinearSolverStatistics(solver: pywraplp.Solver, run_duration_start: Optional
     }
 
     status = solver.Solve()
-    objective_value = solver.Objective().Value() if status in [pywraplp.Solver.OPTIMAL, pywraplp.Solver.FEASIBLE] else None
+    objective_value = (
+        solver.Objective().Value() if status in [pywraplp.Solver.OPTIMAL, pywraplp.Solver.FEASIBLE] else None
+    )
 
     return nextmv.Statistics(
         run=run,

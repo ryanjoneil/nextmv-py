@@ -8,12 +8,12 @@ class TestLinearSolverOptions(unittest.TestCase):
         """Test that LinearSolverOptions can be converted to nextmv.Options"""
         options = nortools.LinearSolverOptions()
         nextmv_options = options.to_nextmv()
-        
+
         # Check that we get the expected options
         options_dict = nextmv_options.options_dict()
         self.assertIsInstance(options_dict, list)
         self.assertGreater(len(options_dict), 0)
-        
+
         # Check for specific expected parameters
         option_names = [option["name"] for option in options_dict]
         self.assertIn("solver_type", option_names)
@@ -27,12 +27,12 @@ class TestCpModelOptions(unittest.TestCase):
         """Test that CpModelOptions can be converted to nextmv.Options"""
         options = nortools.CpModelOptions()
         nextmv_options = options.to_nextmv()
-        
+
         # Check that we get the expected options
         options_dict = nextmv_options.options_dict()
         self.assertIsInstance(options_dict, list)
         self.assertGreater(len(options_dict), 0)
-        
+
         # Check for specific expected parameters
         option_names = [option["name"] for option in options_dict]
         self.assertIn("max_time_in_seconds", option_names)
@@ -45,12 +45,12 @@ class TestKnapsackSolverOptions(unittest.TestCase):
         """Test that KnapsackSolverOptions can be converted to nextmv.Options"""
         options = nortools.KnapsackSolverOptions()
         nextmv_options = options.to_nextmv()
-        
+
         # Check that we get the expected options
         options_dict = nextmv_options.options_dict()
         self.assertIsInstance(options_dict, list)
         self.assertGreater(len(options_dict), 0)
-        
+
         # Check for specific expected parameters
         option_names = [option["name"] for option in options_dict]
         self.assertIn("solver_name", option_names)
