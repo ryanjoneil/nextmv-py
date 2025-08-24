@@ -26,6 +26,9 @@
 <a href="https://pypi.org/project/nextmv-gurobipy" target="_blank">
     <img src="https://img.shields.io/pypi/v/nextmv-gurobipy?color=%2334D058&label=nextmv-gurobipy" alt="Package version">
 </a>
+<a href="https://pypi.org/project/nextmv-ortools" target="_blank">
+    <img src="https://img.shields.io/pypi/v/nextmv-ortools?color=%2334D058&label=nextmv-ortools" alt="Package version">
+</a>
 <a href="https://pypi.org/project/nextmv-scikit-learn" target="_blank">
     <img src="https://img.shields.io/pypi/v/nextmv-scikit-learn?color=%2334D058&label=nextmv-scikit-learn" alt="Package version">
 </a>
@@ -41,6 +44,8 @@ Nextmv Cloud API:
 * [`nextmv-gurobipy`][nextmv-gurobipy]: A Python SDK providing convenience
       functions for working with Gurobi (`gurobipy`) models in the Nextmv
       platform.
+* [`nextmv-ortools`][nextmv-ortools]: A Python SDK providing convenience
+      functions for working with OR-Tools models in the Nextmv platform.
 * [`nextmv-scikit-learn`][nextmv-scikit-learn]: A Python SDK providing
       convenience functions for working with `scikit-learn` models in the
       Nextmv platform.
@@ -68,6 +73,7 @@ There are two ways in which you can use community apps:
 [nextmv-py]: https://github.com/nextmv-io/nextmv-py
 [nextmv]: ./nextmv/index.md
 [nextmv-gurobipy]: ./nextmv-gurobipy/index.md
+[nextmv-ortools]: ./nextmv-ortools/index.md
 [nextmv-scikit-learn]: ./nextmv-scikit-learn/index.md
 [community-apps-gh]: https://github.com/nextmv-io/community-apps
 [cli]: https://docs.nextmv.io/docs/using-nextmv/reference/cli
